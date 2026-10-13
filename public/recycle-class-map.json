@@ -1,0 +1,26 @@
+{
+  "classes": [
+    "cardboard",
+    "glass",
+    "metal",
+    "paper",
+    "plastic",
+    "food_organics",
+    "miscellaneous_trash",
+    "textile_trash",
+    "vegetation"
+  ],
+  "recyclable_classes": [
+    "cardboard",
+    "glass",
+    "metal",
+    "paper",
+    "plastic"
+  ],
+  "non_recyclable_classes": [
+    "food_organics",
+    "miscellaneous_trash",
+    "textile_trash",
+    "vegetation"
+  ]
+}
