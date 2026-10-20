@@ -5,7 +5,7 @@ import { defineConfig } from "vite"
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: "./",
+  base: "/Congressional-App-Challenge-Recyclable-Classifier/",
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
