@@ -1,15 +1,16 @@
 import { createClient } from "@supabase/supabase-js"
 
 const configuredUrl = import.meta.env.VITE_SUPABASE_URL?.trim()
-const configuredAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY?.trim()
+const configuredKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY?.trim()
+  || import.meta.env.VITE_SUPABASE_ANON_KEY?.trim()
 
-export const isSupabaseConfigured = Boolean(configuredUrl && configuredAnonKey)
+export const isSupabaseConfigured = Boolean(configuredUrl && configuredKey)
 
 // Keep previews usable when deployment secrets have not been configured.
 // The Supabase client validates its URL eagerly, which previously crashed the
 // app before React could render its first frame.
 const supabaseUrl = configuredUrl || "https://demo.supabase.co"
-const supabaseAnonKey = configuredAnonKey || "demo-anon-key"
+const supabaseAnonKey = configuredKey || "demo-anon-key"
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 

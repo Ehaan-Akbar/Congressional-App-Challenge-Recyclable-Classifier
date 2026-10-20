@@ -48,6 +48,9 @@ function ReportCard({ report }: { report: TrashReport }) {
         </div>
 
         <p className="mt-1 text-xs text-muted-foreground line-clamp-2">{report.description}</p>
+        {report.image_url && (
+          <img src={report.image_url} alt={report.title} loading="lazy" className="mt-2 h-40 w-full rounded-md object-cover" />
+        )}
 
         {report.ai_classification && (
           <p className="mt-1.5 text-xs text-primary/80 line-clamp-1 italic">

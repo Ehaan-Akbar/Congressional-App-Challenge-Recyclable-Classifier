@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { ArrowLeft, Camera, MapPin, Loader2, Sparkles, CheckCircle, AlertTriangle } from "lucide-react"
 
 import { supabase, CATEGORIES, isSupabaseConfigured } from "@/lib/supabase"
+import { uploadReportImage, validateReportImage } from "@/lib/report-images"
 import { classifyProblem } from "@/lib/ai"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -33,6 +34,14 @@ export default function ReportPage() {
   function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
     if (!file) return
+    try {
+      validateReportImage(file)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Invalid photo.")
+      e.target.value = ""
+      return
+    }
+    setError("")
     setImageFile(file)
     const reader = new FileReader()
     reader.onload = () => setImagePreview(reader.result as string)
@@ -83,13 +92,7 @@ export default function ReportPage() {
         throw new Error("Reporting is in demo mode. Add the Supabase environment variables to submit reports.")
       }
 
-      let imageUrl: string | null = null
-
-      // Upload image if present (stub — would use Supabase Storage in production)
-      if (imageFile) {
-        // imageUrl = await uploadImage(imageFile)  // TODO: wire to Supabase Storage
-        imageUrl = null
-      }
+      const imageUrl = imageFile ? await uploadReportImage(imageFile) : null
 
       const { error: dbError } = await supabase.from("trash_reports").insert({
         title: title.trim() || (aiResult?.summary.slice(0, 60) ?? "Environmental Issue"),
@@ -193,7 +196,7 @@ export default function ReportPage() {
           <input
             ref={fileRef}
             type="file"
-            accept="image/*"
+            accept="image/jpeg,image/png,image/webp"
             capture="environment"
             className="sr-only"
             onChange={handleImageChange}
